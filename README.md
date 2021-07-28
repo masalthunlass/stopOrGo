@@ -12,7 +12,7 @@
 </html>
 ```
 
-4. npm install --save-dev jest
+4. npm install --save-dev jest @types/jest
 5. package.json script test jest
 6. ajouter babel (npm install + preset)
 ```json
