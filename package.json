@@ -1,4 +1,10 @@
 {
+  "app": "dist/index.html",
+  "targets": {
+    "app": {
+      "publicUrl": "./"
+    }
+  },
   "name": "stoporgo",
   "version": "1.0.0",
   "description": "",
@@ -13,12 +19,13 @@
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
-    "@parcel/transformer-inline-string": "^2.0.0-beta.2",
+    "@parcel/transformer-image": "^2.0.0-nightly.2400",
+    "@parcel/transformer-inline-string": "^2.0.0-nightly.778",
     "@types/jest": "^26.0.24",
     "autoprefixer": "^10.3.1",
     "babel-jest": "^27.0.6",
     "jest": "^27.0.6",
-    "parcel": "*",
+    "parcel": "2.0.0-nightly.776",
     "postcss": "^8.3.5",
     "postcss-modules": "^4.1.3",
     "typescript": "^4.3.5"
