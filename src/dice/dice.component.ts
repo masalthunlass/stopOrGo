@@ -1,4 +1,4 @@
-import  css  from "bundle-text:./dice.css";
+import css from "bundle-text:./dice.css";
 import go from "url:../assets/image/go.png";
 import one from "url:../assets/image/one.png";
 import two from "url:../assets/image/two.png";
@@ -16,10 +16,11 @@ template.innerHTML = `
       <img id="dice-img" src=${go} alt="go">
     </div>
 `;
+console.log(template.innerHTML);
 
 
 export class Dice extends HTMLElement {
-   private diceCurrentValue: number = 0;
+   private _currentValue: number = 0;
 
     constructor() {
         super();
@@ -29,6 +30,10 @@ export class Dice extends HTMLElement {
 
     static get observedAttributes() {
         return ['src'];
+    }
+
+    get currentValue() {
+      return this._currentValue;
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -49,9 +54,9 @@ export class Dice extends HTMLElement {
         this.shadowRoot.getElementById("dice-img").setAttribute("src", diceImgMappingElement);
     }
 
-    private roll(): void {
-        this.diceCurrentValue = Math.floor(Math.random() * 6) + 1;
-        this.setDiceImg(diceImgMapping[this.diceCurrentValue]);
+    roll(): void {
+        this._currentValue = Math.floor(Math.random() * 6) + 1;
+        this.setDiceImg(diceImgMapping[this.currentValue]);
     }
 }
 

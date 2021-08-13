@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
+    "strict": false,
     "allowJs": true,
     "module": "commonjs",
+    "types": ["node", "jest"],
     "esModuleInterop": true,
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
+    "declaration": true,
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "dist"
   },
@@ -13,5 +17,8 @@
   "exclude": [
     "node_modules"
   ],
-  "include": ["src/**/*"]
+  "include": [
+    "**/*.ts",
+    "**/*.css"
+  ]
 }
