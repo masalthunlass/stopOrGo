@@ -16,7 +16,6 @@ template.innerHTML = `
       <img id="dice-img" src=${go} alt="go">
     </div>
 `;
-console.log(template.innerHTML);
 
 
 export class Dice extends HTMLElement {
@@ -55,7 +54,7 @@ export class Dice extends HTMLElement {
     }
 
     roll(): void {
-        this._currentValue = Math.floor(Math.random() * 6) + 1;
+        this._currentValue = Math.floor( Math.random() * 6) + 1;
         this.setDiceImg(diceImgMapping[this.currentValue]);
     }
 }
