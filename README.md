@@ -76,9 +76,10 @@ customElements.define('sog-dice', Dice);
 * sog pour stopOrGo
 
 5. importer le composant dans index.html
-  
+
 ```html
-<script src="./src/dice/dice.component.ts"></script>
+
+<script src="src/components/dice/dice.component.ts"></script>
 
 <sog-dice></sog-dice>
 ```

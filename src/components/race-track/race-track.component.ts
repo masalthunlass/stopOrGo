@@ -25,12 +25,12 @@ export class RaceTrackComponent extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case 'length':
-                this.createRackOfSize(newValue);
+                this.createTrackOfSize(newValue);
                 break;
         }
     }
 
-    private createRackOfSize(size: number = 1) {
+    private createTrackOfSize(size: number = 1) {
         const currentElement = this.shadowRoot.getElementById("race-track");
         currentElement.innerHTML = "";
         for (let i = 0; i < size; i++) {

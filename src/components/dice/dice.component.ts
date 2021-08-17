@@ -1,12 +1,12 @@
 import css from "bundle-text:./dice.css";
-import go from "url:../assets/image/go.png";
-import one from "url:../assets/image/one.png";
-import two from "url:../assets/image/two.png";
-import three from "url:../assets/image/three.png";
-import four from "url:../assets/image/four.png";
-import five from "url:../assets/image/five.png";
-import six from "url:../assets/image/six.png";
-import {Dice} from "../model/Dice.model";
+import go from "url:../../assets/image/go.png";
+import one from "url:../../assets/image/one.png";
+import two from "url:../../assets/image/two.png";
+import three from "url:../../assets/image/three.png";
+import four from "url:../../assets/image/four.png";
+import five from "url:../../assets/image/five.png";
+import six from "url:../../assets/image/six.png";
+import {Dice} from "../../model/Dice.model";
 
 const diceImgMapping = [ go, one, two, three, four, five, six];
 
