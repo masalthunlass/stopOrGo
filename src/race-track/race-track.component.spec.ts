@@ -1,7 +1,7 @@
-import {RaceTrack} from "./race-track.component";
+import {RaceTrackComponent} from "./race-track.component";
 
 test('new race track of 1 square long', () => {
-    const raceTrack = new RaceTrack();
+    const raceTrack = new RaceTrackComponent();
     expect(raceTrack.length).toBe(1);
 });
 
@@ -22,12 +22,12 @@ test('new race track of 5 square long with previous one of 10 ', () => {
 });
 
 const givenRackOfSize =  (size: number) => {
-    const raceTrack = new RaceTrack();
+    const raceTrack = new RaceTrackComponent();
     raceTrack.length = size;
     return raceTrack;
 }
 
-const getSquareElementsCreated = (raceTrack: RaceTrack) => {
+const getSquareElementsCreated = (raceTrack: RaceTrackComponent) => {
     return raceTrack.shadowRoot.getElementById("race-track").getElementsByTagName("sog-square");
 }
 

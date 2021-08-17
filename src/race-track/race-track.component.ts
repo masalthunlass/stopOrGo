@@ -10,7 +10,7 @@ template.innerHTML = `
     </div>
 `;
 
-export class RaceTrack extends HTMLElement {
+export class RaceTrackComponent extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: "open"})
@@ -51,4 +51,4 @@ export class RaceTrack extends HTMLElement {
     }
 }
 
-customElements.define('sog-race-track', RaceTrack);
+customElements.define('sog-race-track', RaceTrackComponent);

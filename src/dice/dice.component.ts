@@ -18,7 +18,7 @@ template.innerHTML = `
 `;
 
 
-export class Dice extends HTMLElement {
+export class DiceComponent extends HTMLElement {
    private _currentValue: number = 0;
 
     constructor() {
@@ -59,4 +59,4 @@ export class Dice extends HTMLElement {
     }
 }
 
-customElements.define('sog-dice', Dice);
+customElements.define('sog-dice', DiceComponent);

@@ -5,7 +5,7 @@ template.innerHTML = `<style>${css}</style>
    <div id="square" >
     </div>`;
 
-export class Square extends HTMLElement {
+export class SquareComponent extends HTMLElement {
 
     constructor() {
         super();
@@ -15,4 +15,4 @@ export class Square extends HTMLElement {
 
 }
 
-customElements.define('sog-square', Square);
+customElements.define('sog-square', SquareComponent);

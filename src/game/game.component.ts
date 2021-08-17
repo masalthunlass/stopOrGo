@@ -1,5 +1,5 @@
-export {Dice} from "../dice/dice.component";
-export {RaceTrack} from "../race-track/race-track.component";
+export {DiceComponent} from "../dice/dice.component";
+export {RaceTrackComponent} from "../race-track/race-track.component";
 import css from "bundle-text:./game.css";
 
 const template = document.createElement('template');

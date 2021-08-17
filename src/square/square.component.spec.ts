@@ -1,7 +1,7 @@
-import {Square} from "./square.component";
+import {SquareComponent} from "./square.component";
 
 
 test('create', () => {
-    const square = new Square();
+    const square = new SquareComponent();
     expect(square).toBeTruthy();
 });
