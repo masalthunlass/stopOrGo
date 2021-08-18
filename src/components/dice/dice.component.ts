@@ -28,6 +28,18 @@ export class DiceComponent extends HTMLElement {
             .appendChild(template.content.cloneNode(true));
     }
 
+    get diceImg() {
+        return this.shadowRoot.getElementById("dice-img").getAttribute("src");
+    }
+
+    set diceImg(val: string) {
+        if (val) {
+            this.shadowRoot.getElementById("dice-img").setAttribute('src',  val);
+        } else {
+            this.shadowRoot.getElementById("dice-img").removeAttribute('src');
+        }
+    }
+
     static get observedAttributes() {
         return ['src'];
     }
@@ -43,13 +55,11 @@ export class DiceComponent extends HTMLElement {
     connectedCallback() {
         this.addEventListener("click",  (e)  => {
             this.dice.roll();
-            this.setDiceImg(diceImgMapping[this.dice.currentValue]);
+            this.diceImg = diceImgMapping[this.dice.currentValue];
+            this.dispatchEvent(new CustomEvent('DICE_VALUE_UPDATED', {detail: this.dice.currentValue} ))
         });
     }
 
-    private setDiceImg(diceImgMappingElement: string = go) {
-        this.shadowRoot.getElementById("dice-img").setAttribute("src", diceImgMappingElement);
-    }
 
 }
 customElements.define('sog-dice', DiceComponent);
