@@ -7,3 +7,20 @@
     position: center;
 }
 
+#square[color='red'] {
+    background-color: red;
+}
+
+#square[color='yellow'] {
+    background-color: yellow;
+}
+
+#square[color='blue']{
+    background-color: blue;
+}
+
+#square[color='green'] {
+    background-color: green;
+}
+
+

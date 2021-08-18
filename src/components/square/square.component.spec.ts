@@ -5,3 +5,4 @@ test('create', () => {
     const square = new SquareComponent();
     expect(square).toBeTruthy();
 });
+
