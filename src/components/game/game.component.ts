@@ -1,6 +1,6 @@
-export {DiceComponent} from "../dice/dice.component";
-export {RaceTrackComponent} from "../race-track/race-track.component";
+import {Game} from "../../model/Game.model";
 import css from "bundle-text:./game.css";
+import {Player} from "../../model/Player.model";
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -12,13 +12,15 @@ template.innerHTML = `
 `;
 
 export class GameComponent extends HTMLElement {
+
+    private game: Game = new Game([new Player('Joueur 1')]);
+
     constructor() {
         super();
         this.attachShadow({mode: "open"})
             .appendChild(
                 template.content.cloneNode(true)
             );
-
     }
 
 }

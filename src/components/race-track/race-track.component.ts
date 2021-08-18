@@ -1,6 +1,6 @@
 import css from "bundle-text:./race-track.css";
 
-export {Square} from "../square/square.component";
+export {SquareComponent} from "../square/square.component";
 
 const template = document.createElement('template');
 
@@ -9,7 +9,6 @@ template.innerHTML = `
    <div id="race-track" >
     </div>
 `;
-
 export class RaceTrackComponent extends HTMLElement {
     constructor() {
         super();
