@@ -6,7 +6,7 @@ const template = document.createElement('template');
 
 template.innerHTML = `
    <style>${css}</style>
-   <div id="race-track" >
+   <div id="race-track">
     </div>
 `;
 export class RaceTrackComponent extends HTMLElement {
@@ -14,7 +14,18 @@ export class RaceTrackComponent extends HTMLElement {
         super();
         this.attachShadow({mode: "open"})
             .appendChild(template.content.cloneNode(true));
+    }
 
+    get length() {
+        return +this.getAttribute("length") || 1;
+    }
+
+    set length(val) {
+        if (val) {
+            this.setAttribute('length', '' + val);
+        } else {
+            this.removeAttribute('length');
+        }
     }
 
     static get observedAttributes() {
@@ -37,17 +48,7 @@ export class RaceTrackComponent extends HTMLElement {
         }
     }
 
-    get length() {
-        return +this.getAttribute("length") || 1;
-    }
 
-    set length(val) {
-        if (val) {
-            this.setAttribute('length', '' + val);
-        } else {
-            this.removeAttribute('length');
-        }
-    }
 }
 
 customElements.define('sog-race-track', RaceTrackComponent);
