@@ -1,4 +1,5 @@
 import css from "bundle-text:./race-track.css";
+import {RaceTrackPosition} from "../../model/RaceTrackPosition.model";
 
 export {SquareComponent} from "../square/square.component";
 
@@ -41,14 +42,32 @@ export class RaceTrackComponent extends HTMLElement {
     }
 
     private createTrackOfSize(size: number = 1) {
-        const currentElement = this.shadowRoot.getElementById("race-track");
+        const currentElement = this.rootNode;
         currentElement.innerHTML = "";
-        for (let i = 0; i < size; i++) {
-            currentElement.append(document.createElement("sog-square"));
+        for (let i = 1; i <= size; i++) {
+            let square = document.createElement("sog-square");
+            currentElement.append(square);
         }
     }
 
 
+    private get rootNode() {
+        return this.shadowRoot.getElementById("race-track");
+    }
+
+    connectedCallback() {
+        this.addEventListener("POSITION_CHANGED", ({detail: raceTrackPosition}: CustomEvent<RaceTrackPosition>) => {
+            this.updateCurrentPlayerPosition(raceTrackPosition);
+        });
+
+    }
+
+
+    private updateCurrentPlayerPosition(raceTrackPosition) {
+        let squares = this.rootNode.getElementsByTagName("sog-square");
+        squares.item(raceTrackPosition.previousPlayerPosition).removeAttribute("color");
+        squares.item(raceTrackPosition.currentPlayerPosition).setAttribute("color", raceTrackPosition.playerColor);
+    }
 }
 
 customElements.define('sog-race-track', RaceTrackComponent);

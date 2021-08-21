@@ -13,6 +13,7 @@ export class SquareComponent extends HTMLElement {
             template.content.cloneNode(true));
     }
 
+
     set color(val: string) {
         if (val) {
             this.setAttribute("color", val);
@@ -20,6 +21,7 @@ export class SquareComponent extends HTMLElement {
             this.removeAttribute("color");
         }
     }
+
 }
 
 customElements.define('sog-square', SquareComponent);

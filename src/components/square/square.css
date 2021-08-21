@@ -7,19 +7,20 @@
     position: center;
 }
 
-#square[color='red'] {
+:host([color='red']) #square {
     background-color: red;
 }
 
-#square[color='yellow'] {
+
+:host([color='yellow']) #square  {
     background-color: yellow;
 }
 
-#square[color='blue']{
+:host([color='blue']) #square {
     background-color: blue;
 }
 
-#square[color='green'] {
+:host([color='green']) #square {
     background-color: green;
 }
 

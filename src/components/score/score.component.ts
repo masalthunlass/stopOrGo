@@ -1,5 +1,4 @@
 import css from "bundle-text:./score.css";
-import {Player} from "../../model/Player.model";
 import {Score} from "../../model/Score.model";
 
 const template = document.createElement('template');
@@ -18,16 +17,21 @@ export class ScoreComponent extends HTMLElement {
             .appendChild(
                 template.content.cloneNode(true)
             );
-
     }
 
     connectedCallback() {
-        this.addEventListener("GAME_START", ({ detail  : score }: (CustomEvent<Score>)) => {
-            score.players.forEach((player) => {
-                this.rootNode.innerHTML = `<span class="${score.isCurrent(player) ? 'show' : 'hide'}">*</span>
-                                            <span class="${player.color}">${player.name}</span> : ${player.score} pts`;
-            });
+        this.addEventListener("GAME_START", ({detail: scores}: (CustomEvent<Score[]>)) => {
+            this.displayScore(scores);
+        });
+        this.addEventListener("SCORE_UPDATED", ({detail: scores}: (CustomEvent<Score[]>)) => {
+            this.displayScore(scores);
+        });
+    }
 
+    displayScore(scores: Score[]) {
+        scores.forEach((score) => {
+            this.rootNode.innerHTML = `<span class="${score.playerIsCurrent ? 'show' : 'hide'}">*</span>
+                                       <span class="${score.playerColor}">${score.playerName}</span> : ${score.playerLastScore} pts`;
         });
     }
 

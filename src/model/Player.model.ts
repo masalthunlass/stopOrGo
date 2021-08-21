@@ -3,8 +3,7 @@ export class Player {
 
     constructor(private _name,
                 private _color,
-                public score = 0,
-                public position = 0 ) {
+                public scores = [0]) {
         if (_name === undefined || _name === '') throw  new Error('a player must have a name');
         if (_color === undefined || _color === '') throw  new Error('a player must have a colour');
     }
@@ -17,6 +16,21 @@ export class Player {
         return this._color;
     }
 
+    get currentScore() {
+       return (this.scores.length > 0) ? this.scores[this.scores.length-1]: 0;
+    }
 
+    get previousScore() {
+        return  (this.scores.length > 1) ? this.scores[this.scores.length-2]: 0;
+    }
 
+    updateScore(diceValue: number) {
+        let score = this.currentScore;
+        if (diceValue >= score) {
+            score += diceValue;
+        } else {
+            score -= diceValue;
+        }
+        this.scores.push(score);
+    }
 }

@@ -2,6 +2,9 @@ import {Game} from "../../model/Game.model";
 import css from "bundle-text:./game.css";
 import {Player} from "../../model/Player.model";
 import {Score} from "../../model/Score.model";
+import {PlayersToScores} from "../../mappers/PlayersToScores";
+import {RaceTrackPosition} from "../../model/RaceTrackPosition.model";
+import {PlayerToRaceTrackPosition} from "../../mappers/PlayerToRaceTrackPosition";
 
 export {DiceComponent} from "../dice/dice.component";
 export {RaceTrackComponent} from "../race-track/race-track.component";
@@ -19,7 +22,6 @@ template.innerHTML = `
 
 export class GameComponent extends HTMLElement {
 
-    private players: Player[];
     private game: Game;
 
     constructor() {
@@ -28,23 +30,41 @@ export class GameComponent extends HTMLElement {
             .appendChild(
                 template.content.cloneNode(true)
             );
-        this.players = [new Player('Joueur 1', 'red')];
-        this.game = new Game(this.players);
+        this.game = new Game([new Player('Joueur 1', 'red')]);
 
+    }
 
+    get raceTrackComponent() {
+        return this.rootNode.getElementsByTagName("sog-race-track").item(0);
     }
 
     get scoreComponent() {
-        return this.shadowRoot.getElementById("game").getElementsByTagName("sog-score").item(0);
+        return this.rootNode.getElementsByTagName("sog-score").item(0);
+    }
+
+
+    get diceComponent() {
+        return this.rootNode.getElementsByTagName("sog-dice").item(0);
+    }
+
+
+    private get rootNode() {
+        return this.shadowRoot.getElementById("game");
     }
 
     connectedCallback() {
-        window.addEventListener("load", (e: CustomEvent<Score>) => {
-            this.scoreComponent.dispatchEvent(new CustomEvent('GAME_START',
-                {detail:   new Score(this.players, this.game.currentPlayer.name)}));
-
+        window.addEventListener("load", (e: CustomEvent) => {
+            this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('GAME_START',
+                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer)}));
         });
 
+        this.diceComponent.addEventListener("DICE_VALUE_UPDATED", ({detail: diceValue}: CustomEvent<number>) => {
+            this.game.currentPlayer.updateScore(diceValue);
+            this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('SCORE_UPDATED',
+                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer)}));
+            this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
+                {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
+        });
     }
 
 }
