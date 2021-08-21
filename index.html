@@ -3,9 +3,32 @@
     <script type="module" src="src/components/game/game.component.ts"></script>
 </head>
 <body>
+<style>
+    body {
+        font-family: "arial", sans serif;
 
+    }
+    h1 {
+        text-align: center;
+    }
+    #rules {
+       margin-right: auto;
+        margin-left: auto;
+        width: 600px;
+        border: 2px solid black;
+        border-radius: 5px;
+        margin-bottom: 45px;
+        padding: 8px;
+    }
+</style>
 <div>
-    <h2>Stop Or Go ?</h2>
+    <h1>Stop Or Go ?</h1>
+    <div id="rules">
+        Le but du jeu est d'arriver à la dernière case.
+        Lancez le dé.
+        Si vous faites plus que la fois précédente vous avancez de la valeur du dé en nombres de cases,
+        dans le cas contraire, vous reculez de la valeur du dé.
+    </div>
     <sog-game></sog-game>
 
 </div>

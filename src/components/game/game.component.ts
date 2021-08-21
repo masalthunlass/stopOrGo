@@ -15,8 +15,8 @@ template.innerHTML = `
     <style>${css}</style>
    <div id="game">
         <sog-dice></sog-dice>
-        <sog-score players=""></sog-score>
-        <sog-race-track length="10"></sog-race-track>
+        <sog-score></sog-score>
+        <sog-race-track></sog-race-track>
     </div>
 `;
 
@@ -30,7 +30,8 @@ export class GameComponent extends HTMLElement {
             .appendChild(
                 template.content.cloneNode(true)
             );
-        this.game = new Game([new Player('Joueur 1', 'red')]);
+        this.game = new Game([new Player('Joueur 1', 'red')], 10);
+
 
     }
 
@@ -54,14 +55,15 @@ export class GameComponent extends HTMLElement {
 
     connectedCallback() {
         window.addEventListener("load", (e: CustomEvent) => {
+            this.raceTrackComponent.setAttribute("length", '' + this.game.maxScore);
             this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('GAME_START',
-                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer)}));
+                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
         });
 
         this.diceComponent.addEventListener("DICE_VALUE_UPDATED", ({detail: diceValue}: CustomEvent<number>) => {
-            this.game.currentPlayer.updateScore(diceValue);
+            this.game.updateScore(diceValue);
             this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('SCORE_UPDATED',
-                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer)}));
+                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
             this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
                 {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
         });

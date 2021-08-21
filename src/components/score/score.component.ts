@@ -5,7 +5,6 @@ const template = document.createElement('template');
 template.innerHTML = `
     <style>${css}</style>
    <div id="score">
-   
     </div>
 `;
 
@@ -30,8 +29,9 @@ export class ScoreComponent extends HTMLElement {
 
     displayScore(scores: Score[]) {
         scores.forEach((score) => {
-            this.rootNode.innerHTML = `<span class="${score.playerIsCurrent ? 'show' : 'hide'}">*</span>
-                                       <span class="${score.playerColor}">${score.playerName}</span> : ${score.playerLastScore} pts`;
+            this.rootNode.innerHTML = `<span class="${score.playerIsCurrent &&  !score.playerIsWinner ? 'show' : 'hide'}">👉</span>
+                                        <span class="${score.playerIsWinner ? 'show' : 'hide'}">🏆</span>
+                                       <span class="${score.playerColor}">${score.playerName}</span> position : ${score.playerLastScore} `;
         });
     }
 

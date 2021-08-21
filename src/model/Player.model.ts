@@ -24,13 +24,5 @@ export class Player {
         return  (this.scores.length > 1) ? this.scores[this.scores.length-2]: 0;
     }
 
-    updateScore(diceValue: number) {
-        let score = this.currentScore;
-        if (diceValue >= score) {
-            score += diceValue;
-        } else {
-            score -= diceValue;
-        }
-        this.scores.push(score);
-    }
+
 }

@@ -62,10 +62,11 @@ export class RaceTrackComponent extends HTMLElement {
 
     }
 
-
-    private updateCurrentPlayerPosition(raceTrackPosition) {
+    updateCurrentPlayerPosition(raceTrackPosition) {
         let squares = this.rootNode.getElementsByTagName("sog-square");
-        squares.item(raceTrackPosition.previousPlayerPosition).removeAttribute("color");
+        if (squares.item(raceTrackPosition.previousPlayerPosition).hasAttribute("color")) {
+            squares.item(raceTrackPosition.previousPlayerPosition).removeAttribute("color");
+        }
         squares.item(raceTrackPosition.currentPlayerPosition).setAttribute("color", raceTrackPosition.playerColor);
     }
 }

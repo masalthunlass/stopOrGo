@@ -26,79 +26,42 @@ describe('new player ' , () => {
 
 });
 
-describe('on updatingScore ' , () => {
-    test('score must be dice value if currentScore is 0', () => {
+
+
+describe('current score ' , () => {
+    test(' is 0 if scores list is empty', () => {
         const player = new Player('player 1', 'red');
-        player.scores[0] = 0
+        player.scores = []
 
-        player.updateScore(5);
-
-        expect(player.scores[1]).toBe(5);
+        expect(   player.currentScore).toBe(0);
     });
 
-    test('score must be currentScore + dice value if currentScore is greater than dice value ', () => {
+    test(' is 2 if scores list last index is 2', () => {
         const player = new Player('player 1', 'red');
-        player.scores[0] = 3
-
-        player.updateScore(5);
-
-        expect(player.scores[1]).toBe(8);
+        player.scores = [5,2]
+        expect(   player.currentScore).toBe(2);
     });
+});
 
-    test('score must be currentScore - dice value if currentScore is lesser than dice value ', () => {
+describe('previous score ' , () => {
+    test(' is 0 if scores list is empty', () => {
         const player = new Player('player 1', 'red');
-        player.scores[0] = 5
+        player.scores = []
 
-        player.updateScore(3);
-
-        expect(player.scores[1]).toBe(2);
+        expect(   player.previousScore).toBe(0);
     });
 
-    test('score must be currentScore + dice value if currentScore is equal to dice value ', () => {
+    test(' is 0 if scores list has only one element', () => {
         const player = new Player('player 1', 'red');
-        player.scores[0] = 5
+        player.scores = [2]
 
-        player.updateScore(5);
-
-        expect(player.scores[1]).toBe(10);
+        expect(   player.previousScore).toBe(0);
     });
 
-    describe('current score ' , () => {
-        test(' is 0 if scores list is empty', () => {
-            const player = new Player('player 1', 'red');
-            player.scores = []
 
-            expect(   player.currentScore).toBe(0);
-        });
-
-        test(' is 2 if scores list last index is 2', () => {
-            const player = new Player('player 1', 'red');
-            player.scores = [5,2]
-            expect(   player.currentScore).toBe(2);
-        });
+    test(' is 5 if scores list index before last one is 5', () => {
+        const player = new Player('player 1', 'red');
+        player.scores = [5,2]
+        expect(   player.previousScore).toBe(5);
     });
-
-    describe('previous score ' , () => {
-        test(' is 0 if scores list is empty', () => {
-            const player = new Player('player 1', 'red');
-            player.scores = []
-
-            expect(   player.previousScore).toBe(0);
-        });
-
-        test(' is 0 if scores list has only one element', () => {
-            const player = new Player('player 1', 'red');
-            player.scores = [2]
-
-            expect(   player.previousScore).toBe(0);
-        });
-
-
-        test(' is 5 if scores list index before last one is 5', () => {
-            const player = new Player('player 1', 'red');
-            player.scores = [5,2]
-            expect(   player.previousScore).toBe(5);
-        });
-    });
-
 });

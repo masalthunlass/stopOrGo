@@ -1,5 +1,7 @@
 #score {
-    display: inline-block;
+    display: block;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 #score span{

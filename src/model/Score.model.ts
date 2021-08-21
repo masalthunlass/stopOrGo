@@ -3,7 +3,8 @@ export class Score {
     constructor(private _playerName,
                 private _playerColor,
                 private _playerLastScore,
-                private _playerIsCurrent) {
+                private _playerIsCurrent,
+                private _playerIsWinner) {
     }
 
     get playerName() {
@@ -20,5 +21,9 @@ export class Score {
 
     get playerIsCurrent() {
         return this._playerIsCurrent;
+    }
+
+    get playerIsWinner() {
+        return this._playerIsWinner;
     }
 }

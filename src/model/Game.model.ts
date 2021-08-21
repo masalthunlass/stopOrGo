@@ -4,8 +4,12 @@ export class Game {
 
     private _currentPlayerIndex = 0;
 
-    constructor(private _players: Player[]) {
+    constructor(private _players: Player[], private _maxScore: number) {
         if (_players?.length < 1) throw  new Error('the game needs at least one player to start');
+    }
+
+    get maxScore() {
+        return this._maxScore;
     }
 
     get players() {
@@ -22,5 +26,20 @@ export class Game {
        } else {
            this._currentPlayerIndex++;
        }
+    }
+
+    hasWinner() {
+        return this.players.findIndex(player => player.currentScore === this.maxScore) !== -1
+    }
+
+    updateScore(diceValue: number) {
+        let score = this.currentPlayer.currentScore;
+        if (diceValue >= score) {
+            score += diceValue;
+            if (score > this.maxScore) score = this.maxScore;
+        } else {
+            score -= diceValue;
+        }
+        this.currentPlayer.scores.push(score);
     }
 }
