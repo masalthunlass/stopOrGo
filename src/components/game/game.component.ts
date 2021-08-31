@@ -9,6 +9,7 @@ import {PlayerToRaceTrackPosition} from "../../mappers/PlayerToRaceTrackPosition
 export {DiceComponent} from "../dice/dice.component";
 export {RaceTrackComponent} from "../race-track/race-track.component";
 export {ScoreComponent} from "../score/score.component";
+export {GameControlPanelComponent} from "../game-control-panel/game-control-panel.component";
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -17,6 +18,7 @@ template.innerHTML = `
         <sog-dice></sog-dice>
         <sog-score></sog-score>
         <sog-race-track></sog-race-track>
+        <sog-game-control-panel></sog-game-control-panel>
     </div>
 `;
 
@@ -30,7 +32,7 @@ export class GameComponent extends HTMLElement {
             .appendChild(
                 template.content.cloneNode(true)
             );
-        this.game = new Game([new Player('Joueur 1', 'red')], 10);
+        this.game = new Game([new Player('Joueur 1', 'red'), new Player('Joueur 2', 'blue')], 10);
 
 
     }
@@ -46,6 +48,10 @@ export class GameComponent extends HTMLElement {
 
     get diceComponent() {
         return this.rootNode.getElementsByTagName("sog-dice").item(0);
+    }
+
+    get gameControlPanelComponent() {
+        return this.rootNode.getElementsByTagName("sog-game-control-panel").item(0);
     }
 
 
@@ -66,6 +72,18 @@ export class GameComponent extends HTMLElement {
                 {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
             this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
                 {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
+        });
+
+        this.gameControlPanelComponent.addEventListener("NEXT_PLAYER_CLICKED", (e: CustomEvent) => {
+            this.game.nextPlayer();
+        });
+
+        this.gameControlPanelComponent.addEventListener("GAME_RESTART_CLICKED", (e: CustomEvent) => {
+            this.game.reset();
+            this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('GAME_START',
+                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}
+                ));
+            this.raceTrackComponent.dispatchEvent(new CustomEvent('GAME_RESTART_CLICKED'));
         });
     }
 

@@ -20,6 +20,13 @@ export class Game {
         return this.players[this._currentPlayerIndex];
     }
 
+    reset(): void {
+        this.players.forEach(player => {
+            player.resetScore();
+        });
+        this._currentPlayerIndex = 0;
+    }
+
     nextPlayer(): void {
        if(this._currentPlayerIndex + 1 === this._players.length)  {
            this._currentPlayerIndex = 0;

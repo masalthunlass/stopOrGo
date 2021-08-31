@@ -119,7 +119,7 @@ describe('hasWinner ' , () => {
 
         game.hasWinner();
 
-        expect( game.hasWinner()).toBe(true);
+        expect(game.hasWinner()).toBe(true);
     });
 
     test('should be false when no player had reached max score ', () => {
@@ -129,8 +129,34 @@ describe('hasWinner ' , () => {
 
         game.hasWinner();
 
-        expect( game.hasWinner()).toBe(false);
+        expect(game.hasWinner()).toBe(false);
     });
 });
 
+describe('when reset game' , () => {
+    test('scores should be empty for each player ', () => {
+        const game = new Game([new Player('player 1', 'red'), new Player('player 2', 'yellow')], 10);
+        game.players[0].scores = [5];
+        game.players[1].scores = [6];
 
+        game.reset();
+
+        expect(  game.players[0].scores).toEqual([0]);
+        expect(  game.players[1].scores).toEqual([0]);
+
+    });
+
+    test('current player should be first one ', () => {
+        let firstPlayer = new Player('player 1', 'red');
+        let secondPlayer = new Player('player 2', 'yellow');
+        const game = new Game([firstPlayer, secondPlayer], 10);
+        game.nextPlayer();
+        expect(game.currentPlayer).toEqual(secondPlayer);
+
+        game.reset();
+
+        expect(game.currentPlayer).toEqual(firstPlayer);
+
+    });
+
+});

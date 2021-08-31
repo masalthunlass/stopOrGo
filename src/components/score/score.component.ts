@@ -28,8 +28,9 @@ export class ScoreComponent extends HTMLElement {
     }
 
     displayScore(scores: Score[]) {
+        this.rootNode.innerHTML = '';
         scores.forEach((score) => {
-            this.rootNode.innerHTML = `<span class="${score.playerIsCurrent &&  !score.playerIsWinner ? 'show' : 'hide'}">👉</span>
+            this.rootNode.innerHTML += `<span class="${score.playerIsCurrent &&  !score.playerIsWinner ? 'show' : 'hide'}">👉</span>
                                         <span class="${score.playerIsWinner ? 'show' : 'hide'}">🏆</span>
                                        <span class="${score.playerColor}">${score.playerName}</span> position : ${score.playerLastScore} `;
         });

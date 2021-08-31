@@ -24,5 +24,8 @@ export class Player {
         return  (this.scores.length > 1) ? this.scores[this.scores.length-2]: 0;
     }
 
+    resetScore(){
+        this.scores = [0];
+    }
 
 }

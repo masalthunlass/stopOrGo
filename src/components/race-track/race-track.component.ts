@@ -10,6 +10,7 @@ template.innerHTML = `
    <div id="race-track">
     </div>
 `;
+
 export class RaceTrackComponent extends HTMLElement {
     constructor() {
         super();
@@ -60,6 +61,19 @@ export class RaceTrackComponent extends HTMLElement {
             this.updateCurrentPlayerPosition(raceTrackPosition);
         });
 
+        this.addEventListener("GAME_RESTART_CLICKED", (e: CustomEvent) => {
+            this.resetTrack();
+        });
+
+    }
+
+    resetTrack() {
+        let squares = this.rootNode.getElementsByTagName("sog-square");
+        for (let i = 0;i < squares.length;  i++) {
+            if (squares.item(i).hasAttribute("color")) {
+                squares.item(i).removeAttribute("color");
+            }
+        }
     }
 
     updateCurrentPlayerPosition(raceTrackPosition) {
