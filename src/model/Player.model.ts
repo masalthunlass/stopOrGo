@@ -28,4 +28,8 @@ export class Player {
         this.scores = [0];
     }
 
+    hasScoreChanged(){
+        return this.currentScore !== this.previousScore;
+    }
+
 }

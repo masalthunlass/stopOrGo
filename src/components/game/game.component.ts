@@ -68,10 +68,16 @@ export class GameComponent extends HTMLElement {
 
         this.diceComponent.addEventListener("DICE_VALUE_UPDATED", ({detail: diceValue}: CustomEvent<number>) => {
             this.game.updateScore(diceValue);
+
             this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('SCORE_UPDATED',
                 {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
             this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
                 {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
+            if (!this.game.currentPlayer.hasScoreChanged()) {
+                this.game.nextPlayer();
+            }
+
+
         });
 
         this.gameControlPanelComponent.addEventListener("NEXT_PLAYER_CLICKED", (e: CustomEvent) => {
@@ -82,7 +88,7 @@ export class GameComponent extends HTMLElement {
             this.game.reset();
             this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('GAME_START',
                 {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}
-                ));
+            ));
             this.raceTrackComponent.dispatchEvent(new CustomEvent('GAME_RESTART_CLICKED'));
         });
     }
