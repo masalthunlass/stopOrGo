@@ -44,8 +44,8 @@ export class Game {
         if (diceValue >= score) {
             score += diceValue;
             if (score > this.maxScore) score = this.maxScore;
-        } else {
-            score -= diceValue;
+        } else if (this.players.length  == 1) {
+                score -= diceValue;
         }
         this.currentPlayer.scores.push(score);
     }

@@ -32,7 +32,7 @@ export class ScoreComponent extends HTMLElement {
         scores.forEach((score) => {
             this.rootNode.innerHTML += `<span class="${score.playerIsCurrent &&  !score.playerIsWinner ? 'show' : 'hide'}">👉</span>
                                         <span class="${score.playerIsWinner ? 'show' : 'hide'}">🏆</span>
-                                       <span class="${score.playerColor}">${score.playerName}</span> position : ${score.playerLastScore} `;
+                                        <span class="${score.playerColor}">${score.playerName}</span> position : ${score.playerLastScore} `;
         });
     }
 

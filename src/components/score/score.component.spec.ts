@@ -12,7 +12,7 @@ describe( 'display scores', () =>  {
         const scores: Score[] =  [new Score('toto', 'yellow', 2, false, false)];
         scoreComponent.displayScore(scores);
         expect(scoreComponent.shadowRoot.getElementById("score").innerHTML).toEqual(
-            expect.stringContaining(`<span class="yellow">toto</span> : 2 pts`)
+            expect.stringContaining(`<span class="yellow">toto</span> position : 2`)
         );
     });
 

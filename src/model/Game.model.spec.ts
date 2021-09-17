@@ -56,9 +56,13 @@ describe('next player ', () => {
     });
 });
 
-describe('on updatingCurrentPlayerScore ' , () => {
+describe('on updatingCurrentPlayerScore - one player ' , () => {
+    let player;
+    beforeEach(() => {
+        player =  new Player('player 1', 'red');
+    })
     test('score must be dice value if currentScore is 0', () => {
-        const player = new Player('player 1', 'red');
+
         player.scores[0] = 0
         const game = new Game([player], 10);
 
@@ -68,7 +72,7 @@ describe('on updatingCurrentPlayerScore ' , () => {
     });
 
     test('score must be currentScore + dice value if currentScore is greater than dice value ', () => {
-        const player = new Player('player 1', 'red');
+
         player.scores[0] = 3
         const game = new Game([player], 10);
 
@@ -77,8 +81,8 @@ describe('on updatingCurrentPlayerScore ' , () => {
         expect(game.currentPlayer.currentScore).toBe(8);
     });
 
-    test('score must be currentScore - dice value if currentScore is lesser than dice value ', () => {
-        const player = new Player('player 1', 'red');
+    test('score must be currentScore - dice value if currentScore is lesser than dice value', () => {
+
         player.scores[0] = 5
 
         const game = new Game([player], 10);
@@ -89,7 +93,7 @@ describe('on updatingCurrentPlayerScore ' , () => {
     });
 
     test('score must be currentScore + dice value if currentScore is equal to dice value ', () => {
-        const player = new Player('player 1', 'red');
+
         player.scores[0] = 5
         const game = new Game([player], 10);
 
@@ -158,5 +162,69 @@ describe('when reset game' , () => {
         expect(game.currentPlayer).toEqual(firstPlayer);
 
     });
+
+});
+
+
+describe('on updatingCurrentPlayerScore - several players ' , () => {
+    let playerOne;
+    let playerSecond;
+    beforeEach(() => {
+        playerOne =  new Player('player 1', 'red');
+        playerSecond =  new Player('player 2', 'yellow');
+    })
+
+    test('score must be dice value if currentScore is 0', () => {
+
+        playerOne.scores[0] = 0
+        const game = new Game([playerOne, playerSecond], 10);
+
+        game.updateScore(5);
+
+        expect(game.currentPlayer.currentScore).toBe(5);
+    });
+
+    test('score must be currentScore + dice value if currentScore is greater than dice value ', () => {
+
+        playerOne.scores[0] = 3
+        const game = new Game([playerOne, playerSecond], 10);
+
+        game.updateScore(5);
+
+        expect(game.currentPlayer.currentScore).toBe(8);
+    });
+
+    test('score must stay currentScore  value if currentScore is lesser than dice value', () => {
+
+        playerOne.scores[0] = 5
+
+        const game = new Game([playerOne, playerSecond], 10);
+
+        game.updateScore(3);
+
+        expect(game.currentPlayer.currentScore).toBe(5);
+    });
+
+    test('score must be currentScore + dice value if currentScore is equal to dice value ', () => {
+
+        playerOne.scores[0] = 5
+        const game = new Game([playerOne, playerSecond], 10);
+
+        game.updateScore(5);
+
+        expect(game.currentPlayer.currentScore).toBe(10);
+    });
+
+
+    test('score must not be over max score ', () => {
+
+        playerOne.scores[0] = 5
+        const game = new Game([playerOne, playerSecond], 10);
+
+        game.updateScore(6);
+
+        expect(game.currentPlayer.currentScore).toBe(10);
+    });
+
 
 });
