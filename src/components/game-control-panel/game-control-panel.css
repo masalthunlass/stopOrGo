@@ -1,0 +1,7 @@
+#game-control-panel button.hide {
+    display: none;
+}
+
+#game-control-panel button.show {
+    display: inline-block;
+}

@@ -1,0 +1,11 @@
+#score-panel {
+   /* border: 1px black dotted;*/
+    width: 450px;
+    margin: 25px auto;
+    padding: 10px;
+    background-color: palegoldenrod;
+}
+
+#score-panel span {
+    font-weight: bold;
+}

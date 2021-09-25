@@ -8,27 +8,37 @@
         font-family: "arial", sans serif;
 
     }
+
     h1 {
         text-align: center;
+        font-size: 62px;
+        margin-top: 0;
+        padding-top: 0;
     }
+
     #rules {
-       margin-right: auto;
+        color: grey;
+        margin-right: auto;
         margin-left: auto;
-        width: 600px;
-        border: 2px solid black;
-        border-radius: 5px;
-        margin-bottom: 45px;
-        padding: 8px;
+        width: 500px;
+        margin-bottom: 0px;
+        padding: 10px 10px 0px;
+
     }
 </style>
 <div>
-    <h1>Stop Or Go ?</h1>
+
     <div id="rules">
         Le but du jeu est d'arriver à la dernière case.
         Lancez le dé.
-        Si vous faites plus que la fois précédente vous avancez de la valeur du dé en nombres de cases,
-        dans le cas contraire, vous reculez de la valeur du dé.
+        <br/>
+        Si vous faites plus que la fois précédente vous avancez de la valeur du dé en nombres de cases, <br/>
+        A 1 joueur <br/>
+        Si vous faites moins, vous reculez de la valeur du dé.<br/>
+        A plus d'un joueur <br/>
+        Si vous faites moins, vous n'avancez pas et vous perdez votre tour.<br/>
     </div>
+    <h1>Stop ou encore ?</h1>
     <sog-game></sog-game>
 
 </div>

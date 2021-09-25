@@ -39,6 +39,7 @@ export class Game {
         return this.players.findIndex(player => player.currentScore === this.maxScore) !== -1
     }
 
+
     updateScore(diceValue: number) {
         let score = this.currentPlayer.currentScore;
         if (diceValue >= score) {

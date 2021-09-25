@@ -8,17 +8,20 @@ import {PlayerToRaceTrackPosition} from "../../mappers/PlayerToRaceTrackPosition
 
 export {DiceComponent} from "../dice/dice.component";
 export {RaceTrackComponent} from "../race-track/race-track.component";
-export {ScoreComponent} from "../score/score.component";
+export {ScorePanelComponent} from "../score-panel/score-panel.component";
 export {GameControlPanelComponent} from "../game-control-panel/game-control-panel.component";
 
 const template = document.createElement('template');
 template.innerHTML = `
     <style>${css}</style>
    <div id="game">
+    
         <sog-dice></sog-dice>
+        <br/>
+         <sog-game-control-panel></sog-game-control-panel>
         <sog-score></sog-score>
         <sog-race-track></sog-race-track>
-        <sog-game-control-panel></sog-game-control-panel>
+      
     </div>
 `;
 
@@ -75,8 +78,9 @@ export class GameComponent extends HTMLElement {
                 {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
             if (!this.game.currentPlayer.hasScoreChanged()) {
                 this.game.nextPlayer();
+                this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('SCORE_UPDATED',
+                    {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
             }
-
 
         });
 

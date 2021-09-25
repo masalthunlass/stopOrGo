@@ -1,0 +1,35 @@
+#score-player {
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#score-player span{
+    font-weight: bold;
+}
+
+#score-player span.show {
+    display: inline;
+}
+
+#score-player span.hide {
+    display: none;
+}
+
+
+#score-player span.red {
+   color: red;
+}
+
+#score-player span.yellow {
+   color: yellow;
+}
+
+#score-player span.blue {
+   color: blue;
+}
+
+#score-player span.green {
+    color: green;
+}
+
