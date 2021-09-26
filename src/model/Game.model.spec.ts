@@ -54,69 +54,23 @@ describe('next player ', () => {
 
         expect(game.currentPlayer).toBe(firstPlayer);
     });
+
+    test('should start round', () => {
+        let firstPlayer = new Player('toto', 'yellow');
+        let secondPlayer = new Player('titi', 'red');
+        const players = [firstPlayer, secondPlayer];
+
+        const game = new Game(players, 10);
+
+        let spyRound = jest.spyOn(game.currentRound, 'startRound');
+        game.nextPlayer();
+
+        expect(spyRound).toHaveBeenCalled();
+    });
 });
 
-describe('on updatingCurrentPlayerScore - one player ' , () => {
-    let player;
-    beforeEach(() => {
-        player =  new Player('player 1', 'red');
-    })
-    test('score must be dice value if currentScore is 0', () => {
 
-        player.scores[0] = 0
-        const game = new Game([player], 10);
-
-        game.updateScore(5);
-
-        expect(game.currentPlayer.currentScore).toBe(5);
-    });
-
-    test('score must be currentScore + dice value if currentScore is greater than dice value ', () => {
-
-        player.scores[0] = 3
-        const game = new Game([player], 10);
-
-        game.updateScore(5);
-
-        expect(game.currentPlayer.currentScore).toBe(8);
-    });
-
-    test('score must be currentScore - dice value if currentScore is lesser than dice value', () => {
-
-        player.scores[0] = 5
-
-        const game = new Game([player], 10);
-
-        game.updateScore(3);
-
-        expect(game.currentPlayer.currentScore).toBe(2);
-    });
-
-    test('score must be currentScore + dice value if currentScore is equal to dice value ', () => {
-
-        player.scores[0] = 5
-        const game = new Game([player], 10);
-
-        game.updateScore(5);
-
-        expect(game.currentPlayer.currentScore).toBe(10);
-    });
-
-
-    test('score must not be over max score ', () => {
-        const player = new Player('player 1', 'red');
-        player.scores[0] = 5
-        const game = new Game([player], 10);
-
-        game.updateScore(6);
-
-        expect(game.currentPlayer.currentScore).toBe(10);
-    });
-
-
-});
-
-describe('hasWinner ' , () => {
+describe('hasWinner ', () => {
     test('should be true when a player reaches max score ', () => {
         const game = new Game([new Player('player 1', 'red')], 5);
         game.currentPlayer.scores = [5];
@@ -137,7 +91,7 @@ describe('hasWinner ' , () => {
     });
 });
 
-describe('when reset game' , () => {
+describe('when reset game', () => {
     test('scores should be empty for each player ', () => {
         const game = new Game([new Player('player 1', 'red'), new Player('player 2', 'yellow')], 10);
         game.players[0].scores = [5];
@@ -145,8 +99,8 @@ describe('when reset game' , () => {
 
         game.reset();
 
-        expect(  game.players[0].scores).toEqual([0]);
-        expect(  game.players[1].scores).toEqual([0]);
+        expect(game.players[0].scores).toEqual([0]);
+        expect(game.players[1].scores).toEqual([0]);
 
     });
 
@@ -162,69 +116,123 @@ describe('when reset game' , () => {
         expect(game.currentPlayer).toEqual(firstPlayer);
 
     });
+    test('current round should be empty', () => {
+        const game = new Game([new Player('player 1', 'red'), new Player('player 2', 'yellow')], 10);
+        game.currentRound.endRound();
+        game.currentRound['_diceValues'] = [5];
+
+        game.reset();
+
+        expect(game.currentRound.diceValues.length).toEqual(0);
+        expect(game.currentRound.isOver).toBeFalsy();
+
+    });
 
 });
 
 
-describe('on updatingCurrentPlayerScore - several players ' , () => {
+describe('on updatingCurrentPlayerScore - several players ', () => {
     let playerOne;
     let playerSecond;
     beforeEach(() => {
-        playerOne =  new Player('player 1', 'red');
-        playerSecond =  new Player('player 2', 'yellow');
+        playerOne = new Player('player 1', 'red');
+        playerSecond = new Player('player 2', 'yellow');
     })
 
-    test('score must be dice value if currentScore is 0', () => {
+    test('score should be dice value when lastPosition is 0 and there is only one roll in the round ', () => {
 
         playerOne.scores[0] = 0
         const game = new Game([playerOne, playerSecond], 10);
+        game.currentRound['_diceValues'] = [5];
+        game.currentRound['_isOver'] = true;
 
-        game.updateScore(5);
+        game.updateScore();
 
         expect(game.currentPlayer.currentScore).toBe(5);
     });
 
-    test('score must be currentScore + dice value if currentScore is greater than dice value ', () => {
+    test('score should be dice value + last position when  there is only one roll in the round ', () => {
 
         playerOne.scores[0] = 3
         const game = new Game([playerOne, playerSecond], 10);
+        game.currentRound['_diceValues'] = [5];
+        game.currentRound['_isOver'] = true;
 
-        game.updateScore(5);
+        game.updateScore();
 
         expect(game.currentPlayer.currentScore).toBe(8);
     });
 
-    test('score must stay currentScore  value if currentScore is lesser than dice value', () => {
+    test('score should not change when  there is only no roll in the round', () => {
 
         playerOne.scores[0] = 5
-
         const game = new Game([playerOne, playerSecond], 10);
+        game.currentRound['_diceValues'] = [];
+        game.currentRound['_isOver'] = true;
 
-        game.updateScore(3);
+        game.updateScore();
 
         expect(game.currentPlayer.currentScore).toBe(5);
     });
 
-    test('score must be currentScore + dice value if currentScore is equal to dice value ', () => {
+    test('score should be the sum of dice values of the round + last position when  there is only more than one roll in the round ', () => {
 
         playerOne.scores[0] = 5
-        const game = new Game([playerOne, playerSecond], 10);
+        const game = new Game([playerOne, playerSecond], 30);
+        game.currentRound['_diceValues'] = [4, 5];
+        game.currentRound['_isOver'] = true;
 
-        game.updateScore(5);
+        game.updateScore();
 
-        expect(game.currentPlayer.currentScore).toBe(10);
+        expect(game.currentPlayer.currentScore).toBe(14);
     });
 
 
-    test('score must not be over max score ', () => {
+     test('score must not be over max score ', () => {
 
-        playerOne.scores[0] = 5
+          playerOne.scores[0] = 5
+          const game = new Game([playerOne, playerSecond], 10);
+          game.currentRound['_diceValues'] = [4, 5];
+          game.currentRound['_isOver'] = true;
+
+          game.updateScore();
+
+          expect(game.currentPlayer.currentScore).toBe(10);
+      });
+
+
+});
+
+
+describe('on updateRound - several players ', () => {
+    let playerOne;
+    let playerSecond;
+    beforeEach(() => {
+        playerOne = new Player('player 1', 'red');
+        playerSecond = new Player('player 2', 'yellow');
+    })
+
+    test('should push dice value in round while round is not over ', () => {
+
+        playerOne.scores[0] = 0
         const game = new Game([playerOne, playerSecond], 10);
+        let spyRound = jest.spyOn(game.currentRound, 'addDiceValue');
 
-        game.updateScore(6);
+        game.updateRound(5);
 
-        expect(game.currentPlayer.currentScore).toBe(10);
+        expect(spyRound).toHaveBeenCalled()
     });
 
+    test('should not push dice value in round while round is not over ', () => {
 
+        playerOne.scores[0] = 0
+        const game = new Game([playerOne, playerSecond], 10);
+        game.currentRound.endRound();
+
+        let spyRound = jest.spyOn(game.currentRound, 'addDiceValue');
+
+        game.updateRound(5);
+
+        expect(spyRound).not.toHaveBeenCalled()
+    });
 });

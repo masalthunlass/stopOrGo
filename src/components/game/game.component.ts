@@ -15,13 +15,12 @@ const template = document.createElement('template');
 template.innerHTML = `
     <style>${css}</style>
    <div id="game">
-    
         <sog-dice></sog-dice>
         <br/>
          <sog-game-control-panel></sog-game-control-panel>
         <sog-score></sog-score>
         <sog-race-track></sog-race-track>
-      
+     
     </div>
 `;
 
@@ -35,7 +34,7 @@ export class GameComponent extends HTMLElement {
             .appendChild(
                 template.content.cloneNode(true)
             );
-        this.game = new Game([new Player('Joueur 1', 'red'), new Player('Joueur 2', 'blue')], 10);
+        this.game = new Game([new Player('Joueur 1', 'red'), new Player('Joueur 2', 'blue')], 30);
 
 
     }
@@ -70,22 +69,22 @@ export class GameComponent extends HTMLElement {
         });
 
         this.diceComponent.addEventListener("DICE_VALUE_UPDATED", ({detail: diceValue}: CustomEvent<number>) => {
-            this.game.updateScore(diceValue);
-
-            this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('SCORE_UPDATED',
-                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
-            this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
-                {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
-            if (!this.game.currentPlayer.hasScoreChanged()) {
+            /*this.game.updateRound(diceValue);
+            if (this.game.currentRound.isOver) {
+                this.game.updateScore();
                 this.game.nextPlayer();
                 this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('SCORE_UPDATED',
                     {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
-            }
+                this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
+                    {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
+            }*/
 
         });
 
         this.gameControlPanelComponent.addEventListener("NEXT_PLAYER_CLICKED", (e: CustomEvent) => {
-            this.game.nextPlayer();
+            /*this.game.currentRound.endRound();
+            this.game.updateScore();
+            this.game.nextPlayer();*/
         });
 
         this.gameControlPanelComponent.addEventListener("GAME_RESTART_CLICKED", (e: CustomEvent) => {

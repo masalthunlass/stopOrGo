@@ -1,11 +1,17 @@
 import {Player} from "./Player.model";
+import {Round} from "./Round.model";
 
 export class Game {
 
     private _currentPlayerIndex = 0;
+    private _currentRound = new Round();
 
     constructor(private _players: Player[], private _maxScore: number) {
         if (_players?.length < 1) throw  new Error('the game needs at least one player to start');
+    }
+
+    get currentRound() {
+        return this._currentRound;
     }
 
     get maxScore() {
@@ -25,14 +31,16 @@ export class Game {
             player.resetScore();
         });
         this._currentPlayerIndex = 0;
+        this._currentRound.startRound();
     }
 
     nextPlayer(): void {
-       if(this._currentPlayerIndex + 1 === this._players.length)  {
-           this._currentPlayerIndex = 0;
-       } else {
-           this._currentPlayerIndex++;
-       }
+        this.currentRound.startRound();
+        if (this._currentPlayerIndex + 1 === this._players.length) {
+            this._currentPlayerIndex = 0;
+        } else {
+            this._currentPlayerIndex++;
+        }
     }
 
     hasWinner() {
@@ -40,14 +48,18 @@ export class Game {
     }
 
 
-    updateScore(diceValue: number) {
-        let score = this.currentPlayer.currentScore;
-        if (diceValue >= score) {
-            score += diceValue;
-            if (score > this.maxScore) score = this.maxScore;
-        } else if (this.players.length  == 1) {
-                score -= diceValue;
+    updateRound(diceValue: number) {
+        if (!this.currentRound.isOver) {
+            this.currentRound.addDiceValue(diceValue);
         }
-        this.currentPlayer.scores.push(score);
+    }
+
+
+    updateScore() {
+        if (this.currentRound.isOver) {
+            let score = this.currentPlayer.currentScore + this.currentRound.diceValues.reduce((sum, diceValue) => sum + diceValue, 0);
+            if (score > this.maxScore) score = this.maxScore;
+            this.currentPlayer.scores.push(score);
+        }
     }
 }
