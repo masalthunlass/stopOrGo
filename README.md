@@ -1,86 +1,317 @@
-# Démarrer le projet
+### Démarrer le projet
 
-1. npm init
-2. ajouter typescript (npm install + (tsconfig.json + répertoire dist / ou bien tsc --init))
-3. ajouter un bundler Parcel ``npm install -g parcel-bundler``
-       ajouter index.html + app.js
-```html
-<html>
-    <body>
-         <script src="./app.js"></script>
-    </body>
-</html>
-```
+1. `npm install`
+2. `npm run start `
 
-4. npm install --save-dev jest @types/jest
-5. package.json script test jest
-6. ajouter babel (npm install + preset)
-```json
-   {
-  "name": "stoporgo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "clean": "rm dist/bundle.js",
-    "build-prod": "parcel build index.html",
-    "start": "parcel index.html",
-    "test": "jest"
-  },
-  "author": "masalthunlass",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.14.6",  
-    "@babel/preset-env": "^7.14.7",
-    "babel-jest": "^27.0.6",
-    "jest": "^27.0.6",
-    "parcel-bundler": "^1.12.5",
-    "typescript": "^4.3.5"
-  }
-}
+ℹ️ attention : la commande du script clean dans le package.json est écrite pour un système windows, il faut peut-être la
+changer. (start lance un clean + build)
 
-   ```
-7. npm install npm start go localhost:1234
+3. aller à localhost:1234
 
-# Créer un web component
-1. ajouter un fichier dice.component.ts dans src/dice
-2. créer un template 
+### Lancer les tests
+
+1. `npm run test` lance les tests unitaires Jest
+
+# web components
+
+### Création
+
+1. ajouter un fichier <nom component>.component.ts dans un répertoire src/<nom component>
+2. créer un template
+
 ```ts
-const template = document.createElement('template');
+const template = document.createElement('template'); //cette ligne revient à ajouter <template></template>
 template.innerHTML = `<div>
-        ceci est un dé
+        html ici
     </div>
 ;
 ```
 
 3. créer une classe HTMLElement pour le composant et attacher le template dans le shadow dom
+
 ```ts
-class Dice extends HTMLElement {
-       constructor() {
-              super();
-              this.attachShadow({mode: "open"})
-                      .appendChild(
-                              template.content.cloneNode(true)
-                      );
-       }
-       
+class NomComponent extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({mode: "open"})
+            .appendChild(
+                template.content.cloneNode(true)
+            );
+    }
+
 }
 ```
 
-4. définir le custom-element (balise html)
-```ts
-customElements.define('sog-dice', Dice);
-```
-* sog-dice sera le nom de la balise
-* il faut un nom de balise avec un préfixe (sinon pas valide)
-* sog pour stopOrGo
+4. définir le custom-element (= future balise html custom)
 
-5. importer le composant dans index.html
+```ts
+customElements.define('new-component', NomComponent);
+```
+
+ℹ dans cet exemple
+
+* new-component sera le nom de la balise
+* le préfixe est new
+* il faut un nom de balise avec un préfixe (sinon pas valide)
+
+5. ne pas oublier de l'exporter pour l'utiliser dans d'autres fichiers
+
+```ts
+export class NomComponent extends HTMLElement {
+\\...
+}
+```
+
+6. importer le composant
+    * dans un .html
 
 ```html
 
-<script src="src/components/dice/dice.component.ts"></script>
+<script src="src/components/NomComponent/NomComponent.component.ts"></script>
 
-<sog-dice></sog-dice>
+<new-component></new-component>
 ```
-6. lancer le projet et voir le composant
+
+* ou dans un autre composant dans son template
+
+```ts
+export {NomComponent} from "../NomComponent/NomComponent.component";
+
+const template = document.createElement('template');
+template.innerHTML = `
+   <div>
+        <new-component></new-component>  
+    </div>
+`;
+
+export class OtherComponent extends HTMLElement {
+    // ...
+}
+```
+
+(cela peut être fait de manière dynamique)
+
+### Ajouter du style
+
+voici la manière de faire dans ce projet :
+
+1. créer une feuille de style externe par composant ex. nom-component.css
+2. l'importer dans le .ts du component
+
+```ts
+   import css from "bundle-text:./nom-component.css";
+```
+
+3. l'importer dans le template du component
+
+```ts
+   const template = document.createElement('template');
+template.innerHTML = `
+    <style>${css}</style>
+   <div>
+        <new-component></new-component>  
+    </div>
+`;
+```
+
+### Communication entre composants
+
+#### avec des arguments
+
+Prenons l'exemple du composant "carré" suivant. Nous voulons que le composant puisse aussi bien donner un carré rouge
+que jaune.
+
+```ts
+const template = document.createElement('template');
+template.innerHTML = `
+    <style>
+      :host([color='red']) #square {
+       background-color: red;
+    }
+    
+    :host([color='yellow']) #square  {
+        background-color: yellow;
+    }
+    </style>
+    <div id="square" color="">
+    </div>
+`;
+
+export class SquareComponent extends HTMLElement {
+    // ...
+
+}
+
+customElements.define('sog-square', SquareComponent);
+```
+
+1. définir un attribut color (chaine de caractère uniquement) à notre balise custom
+
+```ts
+export class SquareComponent extends HTMLElement {
+
+    set color(val: string) {
+        if (val) {
+            this.setAttribute("color", val);
+        } else {
+            this.removeAttribute("color");
+        }
+    }
+
+}
+```
+
+2. l'utiliser ainsi
+
+```html
+
+<square color="red">
+    <square> // carré rouge
+        <square color="jaune">
+            <square> // carré jaune
+```
+
+3. il est possible d'observer les changements de valeur d'un attribut
+
+* ajouter ceci
+```ts
+export class SquareComponent extends HTMLElement {
+
+    static get observedAttributes() {
+        return ['color'];
+    }
+
+}
+```
+
+* et ajouter une action ici
+```ts
+export class SquareComponent extends HTMLElement {
+
+    // est déclenché en cas de changement de valeur d'un attribut
+    attributeChangedCallback(attributeName, oldValue, newValue) {
+        switch (attributeName) {
+            case 'color':
+                console.log('la nouvelle valeur est ', newValue);
+                console.log('l\'ancienne valeur est ', oldValue);
+                break;
+        }
+    }
+}
+```
+
+#### avec des événements
+
+Prenons l'exemple du composant "panneau de contrôle" suivant, Son template comporte un bouton "Rejouer" que l'on peut
+cliquer.
+
+```ts
+const template = document.createElement('template');
+template.innerHTML = `
+   <div id="control-panel">
+       <button id="restart">Rejouer</button>
+    </div>
+`;
+
+export class ControlPanelComponent extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({mode: "open"})
+            .appendChild(
+                template.content.cloneNode(true)
+            );
+    }
+
+}
+
+customElements.define('sog-control-panel', ControlPanelComponent);
+```
+
+1. créer un getter du bouton qui est dans le shadow dom du composant
+
+```ts
+export class ControlPanelComponent extends HTMLElement {
+    //...
+    private get restartButton() {
+        return this.shadowRoot.getElementById("restart"); //le bouton a id="restart"
+    }
+
+    //...
+}
+
+```
+
+2. ajouter un eventListener pour écouter le clic du bouton
+
+```ts
+export class ControlPanelComponent extends HTMLElement {
+//...
+    // cette méthode est appelée automatiquement à l'insertion du composant dans le dom
+    connectedCallback() {
+
+        //  this.restartButton = le getter créé à l'étape 1
+        this.restartButton.addEventListener("click", (e: CustomEvent) => {
+            // ...
+
+        });
+    }
+}
+```
+
+3. lancer un événement custom plus explicite dont l'origine est le composant "panneau de contrôle" et non plus le bouton
+
+```ts
+
+this.restartButton.addEventListener("click", (e: CustomEvent) => {
+    // dispatchEvent envoie un nouvel événement RESTART_CLICKED
+    this.dispatchEvent(new CustomEvent('RESTART_CLICKED'));
+
+}
+```
+
+4. écouter l'événement dans un autre composant
+
+S'il existe un composant "game" qui contient un "panneau de contrôle"
+
+```ts
+const template = document.createElement('template');
+template.innerHTML = `
+   <div id="game">
+       <sog-control-panel></sog-control-panel>
+    </div>
+`;
+
+export class GameComponent extends HTMLElement {
+    constructor() {
+        //...
+    }
+
+    // getter du panneau de controle
+    private get controlPanel() {
+        return this.shadowRoot.getElementsByTagName("sog-control-panel").item(0);
+    }
+
+    connectedCallback() {
+        // écoute l'événement RESTART_CLICKED sur l'élément qui en est la source
+        this.controlPanel.addEventListener("RESTART_CLICKED", (e: CustomEvent) => {
+            // faire une action ici
+            this.game.restart();
+        });
+    }
+
+}
+```
+
+6. il est possible d'envoyer des valeurs
+
+```ts
+    this.dispatchEvent(new CustomEvent<{ 'par': string }>('RESTART_CLICKED'), {detail: {'par': 'user 1'}});
+```
+
+et de les recevoir
+
+```ts
+this.controlPanel.addEventListener("RESTART_CLICKED", (e: CustomEvent<{ 'par': string }>) => {
+    // e.detail.par vaut 'user 1'
+}
+```
