@@ -55,18 +55,7 @@ describe('next player ', () => {
         expect(game.currentPlayer).toBe(firstPlayer);
     });
 
-    test('should start round', () => {
-        let firstPlayer = new Player('toto', 'yellow');
-        let secondPlayer = new Player('titi', 'red');
-        const players = [firstPlayer, secondPlayer];
 
-        const game = new Game(players, 10);
-
-        let spyRound = jest.spyOn(game.currentRound, 'startRound');
-        game.nextPlayer();
-
-        expect(spyRound).toHaveBeenCalled();
-    });
 });
 
 
@@ -116,17 +105,7 @@ describe('when reset game', () => {
         expect(game.currentPlayer).toEqual(firstPlayer);
 
     });
-    test('current round should be empty', () => {
-        const game = new Game([new Player('player 1', 'red'), new Player('player 2', 'yellow')], 10);
-        game.currentRound.endRound();
-        game.currentRound['_diceValues'] = [5];
 
-        game.reset();
-
-        expect(game.currentRound.diceValues.length).toEqual(0);
-        expect(game.currentRound.isOver).toBeFalsy();
-
-    });
 
 });
 
@@ -143,10 +122,8 @@ describe('on updatingCurrentPlayerScore - several players ', () => {
 
         playerOne.scores[0] = 0
         const game = new Game([playerOne, playerSecond], 10);
-        game.currentRound['_diceValues'] = [5];
-        game.currentRound['_isOver'] = true;
 
-        game.updateScore();
+        game.updateScore(5);
 
         expect(game.currentPlayer.currentScore).toBe(5);
     });
@@ -155,84 +132,24 @@ describe('on updatingCurrentPlayerScore - several players ', () => {
 
         playerOne.scores[0] = 3
         const game = new Game([playerOne, playerSecond], 10);
-        game.currentRound['_diceValues'] = [5];
-        game.currentRound['_isOver'] = true;
 
-        game.updateScore();
+        game.updateScore(5);
 
         expect(game.currentPlayer.currentScore).toBe(8);
     });
 
-    test('score should not change when  there is only no roll in the round', () => {
+
+    test('score must not be over max score ', () => {
 
         playerOne.scores[0] = 5
         const game = new Game([playerOne, playerSecond], 10);
-        game.currentRound['_diceValues'] = [];
-        game.currentRound['_isOver'] = true;
 
-        game.updateScore();
+        game.updateScore(5);
 
-        expect(game.currentPlayer.currentScore).toBe(5);
+        expect(game.currentPlayer.currentScore).toBe(10);
     });
-
-    test('score should be the sum of dice values of the round + last position when  there is only more than one roll in the round ', () => {
-
-        playerOne.scores[0] = 5
-        const game = new Game([playerOne, playerSecond], 30);
-        game.currentRound['_diceValues'] = [4, 5];
-        game.currentRound['_isOver'] = true;
-
-        game.updateScore();
-
-        expect(game.currentPlayer.currentScore).toBe(14);
-    });
-
-
-     test('score must not be over max score ', () => {
-
-          playerOne.scores[0] = 5
-          const game = new Game([playerOne, playerSecond], 10);
-          game.currentRound['_diceValues'] = [4, 5];
-          game.currentRound['_isOver'] = true;
-
-          game.updateScore();
-
-          expect(game.currentPlayer.currentScore).toBe(10);
-      });
 
 
 });
 
 
-describe('on updateRound - several players ', () => {
-    let playerOne;
-    let playerSecond;
-    beforeEach(() => {
-        playerOne = new Player('player 1', 'red');
-        playerSecond = new Player('player 2', 'yellow');
-    })
-
-    test('should push dice value in round while round is not over ', () => {
-
-        playerOne.scores[0] = 0
-        const game = new Game([playerOne, playerSecond], 10);
-        let spyRound = jest.spyOn(game.currentRound, 'addDiceValue');
-
-        game.updateRound(5);
-
-        expect(spyRound).toHaveBeenCalled()
-    });
-
-    test('should not push dice value in round while round is not over ', () => {
-
-        playerOne.scores[0] = 0
-        const game = new Game([playerOne, playerSecond], 10);
-        game.currentRound.endRound();
-
-        let spyRound = jest.spyOn(game.currentRound, 'addDiceValue');
-
-        game.updateRound(5);
-
-        expect(spyRound).not.toHaveBeenCalled()
-    });
-});

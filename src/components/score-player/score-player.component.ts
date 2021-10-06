@@ -6,6 +6,7 @@ template.innerHTML = `
    <div id="score-player">
     </div>
 `;
+
 export class ScorePlayerComponent extends HTMLElement {
 
 
@@ -25,7 +26,7 @@ export class ScorePlayerComponent extends HTMLElement {
 
     set playerIsCurrent(val) {
         if (val) {
-            this.setAttribute('playerIsCurrent','' +  val);
+            this.setAttribute('playerIsCurrent', '' + val);
         } else {
             this.removeAttribute('playerIsCurrent');
         }
@@ -42,7 +43,7 @@ export class ScorePlayerComponent extends HTMLElement {
 
     set playerIsWinner(val) {
         if (val) {
-            this.setAttribute('playerIsWinner','' +  val);
+            this.setAttribute('playerIsWinner', '' + val);
         } else {
             this.removeAttribute('playerIsWinner');
         }
@@ -89,18 +90,17 @@ export class ScorePlayerComponent extends HTMLElement {
     }
 
 
-
     render() {
-        this.rootNode.innerHTML = `<span class="${(this.playerIsCurrent === 'true' &&  this.playerIsWinner === 'false') ? 'show' : 'hide'}">👉</span>
-                                        <span class="${this.playerIsWinner === 'true'  ? 'show' : 'hide'}">🏆</span>
-                                        <span class="${this.playerColor}">${this.playerName}</span> position : ${this.playerLastScore} `;
+        this.rootNode.innerHTML = `<span class="${(this.playerIsCurrent === 'true' && this.playerIsWinner === 'false') ? 'show' : 'hide'}">👉</span>
+                                        <span class="${this.playerIsWinner === 'true' ? 'show' : 'hide'}">🏆</span>
+                                        <span class="${this.playerColor}">${this.playerName}</span> 
+                                       <span>position : ${this.playerLastScore || 0} </span>`;
     }
 
     connectedCallback() {
 
         this.render();
     }
-
 
 
     private get rootNode(): HTMLElement {

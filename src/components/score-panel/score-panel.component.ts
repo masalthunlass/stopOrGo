@@ -1,5 +1,6 @@
-import {Score} from "../../model/Score.model";
 import css from "bundle-text:./score-panel.css";
+import {PlayerScore} from "../../model/PlayerScore.model";
+
 export {ScorePlayerComponent} from "../score-player/score-player.component";
 
 const template = document.createElement('template');
@@ -23,24 +24,24 @@ export class ScorePanelComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        this.addEventListener("GAME_START", ({detail: scores}: (CustomEvent<Score[]>)) => {
+        this.addEventListener("GAME_START", ({detail: scores}: (CustomEvent<PlayerScore[]>)) => {
             this.displayScore(scores);
         });
-        this.addEventListener("SCORE_UPDATED", ({detail: scores}: (CustomEvent<Score[]>)) => {
+        this.addEventListener("SCORE_UPDATED", ({detail: scores}: (CustomEvent<PlayerScore[]>)) => {
             this.displayScore(scores);
         });
+
     }
 
-    displayScore(scores: Score[]) {
+    displayScore(scores: PlayerScore[]) {
         this.rootNode.innerHTML = '';
-        scores.forEach((score) => {
+        scores.forEach((scorePlayer) => {
             this.rootNode.innerHTML += `<sog-score-player 
-                                        playerIsCurrent="${score.playerIsCurrent}" 
-                                        playerIsWinner="${score.playerIsWinner}" 
-                                        playerColor="${score.playerColor}" 
-                                          playerLastScore="${score.playerLastScore}" 
-                                                    playerName="${score.playerName}" 
-                  
+                                        playerIsCurrent="${scorePlayer.isCurrent}" 
+                                        playerIsWinner="${scorePlayer.isWinner}" 
+                                        playerColor="${scorePlayer.color}" 
+                                          playerLastScore="${scorePlayer.lastScore}" 
+                                                    playerName="${scorePlayer.name}" 
                                       ></sog-score-player>`;
         });
     }

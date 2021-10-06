@@ -15,7 +15,10 @@ describe('render', () => {
         scorePlayerComponent.render();
 
         expect(scorePlayerComponent.shadowRoot.getElementById("score-player").innerHTML).toEqual(
-            expect.stringContaining(`<span class="yellow">toto</span> position : 2`)
+            expect.stringContaining(`<span class="yellow">toto</span>`)
+        );
+        expect(scorePlayerComponent.shadowRoot.getElementById("score-player").innerHTML).toEqual(
+            expect.stringContaining(`  <span>position : 2 </span>`)
         );
     });
 

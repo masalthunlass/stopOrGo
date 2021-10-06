@@ -5,7 +5,7 @@ template.innerHTML = `
     <style>${css}</style>
    <div id="game-control-panel">
        <button id="restart" class="hide"><icon>🔁</icon>Rejouer</button>
-       <button id="stop" class="show"><icon>⏹</icon>Passer au joueur suivant</button>
+       <button id="stop" class="hide"><icon>⏹</icon>Passer au joueur suivant</button>
     </div>
 `;
 

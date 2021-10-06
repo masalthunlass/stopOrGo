@@ -1,10 +1,10 @@
 import {Game} from "../../model/Game.model";
 import css from "bundle-text:./game.css";
 import {Player} from "../../model/Player.model";
-import {Score} from "../../model/Score.model";
 import {PlayersToScores} from "../../mappers/PlayersToScores";
-import {RaceTrackPosition} from "../../model/RaceTrackPosition.model";
+import {PlayerScore} from "../../model/PlayerScore.model";
 import {PlayerToRaceTrackPosition} from "../../mappers/PlayerToRaceTrackPosition";
+import {RaceTrackPosition} from "../../model/RaceTrackPosition.model";
 
 export {DiceComponent} from "../dice/dice.component";
 export {RaceTrackComponent} from "../race-track/race-track.component";
@@ -64,32 +64,35 @@ export class GameComponent extends HTMLElement {
     connectedCallback() {
         window.addEventListener("load", (e: CustomEvent) => {
             this.raceTrackComponent.setAttribute("length", '' + this.game.maxScore);
-            this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('GAME_START',
+            this.scoreComponent.dispatchEvent(new CustomEvent<PlayerScore[]>('GAME_START',
                 {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
         });
 
         this.diceComponent.addEventListener("DICE_VALUE_UPDATED", ({detail: diceValue}: CustomEvent<number>) => {
-            /*this.game.updateRound(diceValue);
-            if (this.game.currentRound.isOver) {
-                this.game.updateScore();
-                this.game.nextPlayer();
-                this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('SCORE_UPDATED',
-                    {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
-                this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
-                    {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
-            }*/
+            this.game.updateScore(diceValue);
+            this.scoreComponent.dispatchEvent(new CustomEvent<PlayerScore[]>('SCORE_UPDATED',
+                {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
+
+            this.raceTrackComponent.dispatchEvent(new CustomEvent<RaceTrackPosition>('POSITION_CHANGED',
+                {detail: PlayerToRaceTrackPosition.map(this.game.currentPlayer)}));
+
+            this.game.nextPlayer();
+            this.scoreComponent.dispatchEvent(new CustomEvent<PlayerScore[]>('SCORE_UPDATED',
+                {detail:    PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
+
 
         });
 
-        this.gameControlPanelComponent.addEventListener("NEXT_PLAYER_CLICKED", (e: CustomEvent) => {
-            /*this.game.currentRound.endRound();
-            this.game.updateScore();
-            this.game.nextPlayer();*/
-        });
+      /*  this.gameControlPanelComponent.addEventListener("NEXT_PLAYER_CLICKED", (e: CustomEvent) => {
+             this.game.nextPlayer();
+             this.scoreComponent.dispatchEvent(new CustomEvent<PlayerScore[]>('SCORE_UPDATED',
+                 {detail:    PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}));
+
+        });*/
 
         this.gameControlPanelComponent.addEventListener("GAME_RESTART_CLICKED", (e: CustomEvent) => {
             this.game.reset();
-            this.scoreComponent.dispatchEvent(new CustomEvent<Score[]>('GAME_START',
+            this.scoreComponent.dispatchEvent(new CustomEvent<PlayerScore[]>('GAME_START',
                 {detail: PlayersToScores.map(this.game.players, this.game.currentPlayer, this.game.maxScore)}
             ));
             this.raceTrackComponent.dispatchEvent(new CustomEvent('GAME_RESTART_CLICKED'));
