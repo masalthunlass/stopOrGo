@@ -41,6 +41,15 @@ class NomComponent extends HTMLElement {
 
 }
 ```
+ℹ le **shadow dom** (dom fantôme) permet d'isoler une hiérarchie d'éléments html (et son style), 
+pour les placer dans la page ultérieurement en tant qu'enfants d'un élément html hôte dans le but 
+de composer la page. Cela offre la possibilité de réutilisation du code.
+
+Les éléments et style du template sont clonés dans le shadow dom dans le constructeur. Le template est déclaré 
+en dehors du constructeur pour éviter le coût de le parser à chaque instanciation du composant. 
+
+Il existe un mode d'encapsulation ouvert `{mode: "open"}` et un fermé, qui contrôle possibilité de manipuler
+le dom fantôme avec du javascript ou non. La pratique la plus courante est de laisser le mode ouvert. 
 
 4. définir le custom-element (= future balise html custom)
 
@@ -61,6 +70,7 @@ export class NomComponent extends HTMLElement {
 \\...
 }
 ```
+
 
 6. importer le composant
     * dans un .html
@@ -93,7 +103,8 @@ export class OtherComponent extends HTMLElement {
 
 ### Ajouter du style
 
-voici la manière de faire dans ce projet :
+Il est important que le style soit inclus dans le composant.
+Voici la manière de faire dans ce projet :
 
 1. créer une feuille de style externe par composant ex. nom-component.css
 2. l'importer dans le .ts du component
